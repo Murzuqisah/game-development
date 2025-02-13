@@ -60,14 +60,25 @@ button:hover {
     animation: slideIn 1.5s ease-in-out;
 }
 
+.game-logo {
+    width: 100px;
+    height: auto;
+    position: absolute;
+    top: 1rem;
+    align-items: center;
+    animation: fadeIn 1.5s ease-out;
+}
+
 
 #gameArea {
     position: relative;
-    width: 600px;
-    height: 400px;
+    margin-top: 10px;
+    width: 1200px;
+    height: 800px;
     margin: 20px auto;
-    background-color: #333;
-    border: 1.2rem solid #f9f9f9;
+    background-color: #222;
+    border: 0.3rem solid #f9f9f9;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
 
@@ -77,6 +88,9 @@ button:hover {
     height: 20px;
     background-color: red;
     border-radius: 50%;
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.8);
+    top: 350px;
+    left: 290px;
 }
 
 .bat {
@@ -84,17 +98,29 @@ button:hover {
     width: 80px;
     height: 10px;
     background-color: blue;
+    bottom: 175px;
+    left: 250px;
 }
 
 .brick {
     position: absolute;
+    width: 70px;
+    height: 30px;
     box-sizing: border-box;
     border: 1px solid #000;
     background-color: green;
+    top: 140px;
+    left: 50px;
 }
 
 #hud {
     margin-bottom: 10px;
+    width: 600px;
+    display: flex;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    justify-content: space-between;
 }
 
 /* Keyframes for animation */
