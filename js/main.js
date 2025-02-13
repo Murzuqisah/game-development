@@ -4,12 +4,6 @@
 // Import the game class
 import Game from './game.js';
 
-function gameLoop() {
-    updateGame();
-    renderGame();
-    requestAnimationFrame(gameLoop);
-}
-
 // Create a new game object
 
 function updateGame() {
