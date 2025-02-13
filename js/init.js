@@ -8,6 +8,7 @@ const startButton = document.getElementById('startButton');
 const pauseButton = document.getElementById('pauseButton');
 const resumeButton = document.getElementById('resumeButton');
 const stopButton = document.getElementById('stopButton');
+const levelDisplay = document.getElementById('levelStep');
 
 
 // game area dimensions
@@ -41,3 +42,7 @@ let level = 1;
 const levelStep = 5;
 let gameRunning = false;
 let gamePaused = false;
+
+// initialize the field
+const drawRect = (x, y, width, height, color) => {};
+const drawCircle = (x, y, radius, color) => {};
