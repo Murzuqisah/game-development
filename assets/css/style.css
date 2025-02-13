@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #1d1f21, #343a40);
+    color: #f1f1f1;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+p {
+    font-size: 1.5rem;
+    margin: 20px 0;
+}
+
+.logo-img {
+    width: 380px;
+    height: 380px;
+}
+
+button {
+    background-color: #ff6f61;
+    columns: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    height: 50px;
+    width: 100px;
+    border-radius: 7%;
+    box-shadow: inset;
+    position: absolute;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #ff4a3d;
+    transform: scale(1.05);
+}
+
+.start-img {
+    width: 100px;
+    height: auto;
+    margin-top: 20px;
+    animation: slideIn 1.5s ease-in-out;
+}
+
+.game-logo {
+    width: 100px;
+    height: auto;
+    position: absolute;
+    top: 1rem;
+    align-items: center;
+    animation: fadeIn 1.5s ease-out;
+}
+
+
+#gameArea {
+    position: relative;
+    margin-top: 10px;
+    width: 1200px;
+    height: 800px;
+    margin: 20px auto;
+    background-color: #222;
+    border: 0.3rem solid #f9f9f9;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.ball {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.8);
+    top: 350px;
+    left: 290px;
+}
+
+.bat {
+    position: absolute;
+    width: 80px;
+    height: 10px;
+    background-color: blue;
+    bottom: 175px;
+    left: 250px;
+}
+
+.brick {
+    position: absolute;
+    width: 70px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    background-color: green;
+    top: 140px;
+    left: 50px;
+}
+
+#hud {
+    margin-bottom: 10px;
+    width: 600px;
+    display: flex;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+/* Keyframes for animation */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
