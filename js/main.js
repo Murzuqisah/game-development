@@ -2,7 +2,7 @@
 // This file is responsible for setting up the game and starting the game loop
 
 // Import the game class
-import Game from './game.js';
+import Game from './init.js';
 
 // Create a new game object
 
