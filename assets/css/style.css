@@ -1,0 +1,43 @@
+body {
+    background-color: gray;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+
+#gameArea {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    margin: 20px auto;
+    background-color: #333;
+    border: 1.2rem solid #f9f9f9;
+    overflow: hidden;
+}
+
+.ball {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.bat {
+    position: absolute;
+    width: 80px;
+    height: 10px;
+    background-color: blue;
+}
+
+.brick {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    background-color: green;
+}
+
+#hud {
+    margin-bottom: 10px;
+}
