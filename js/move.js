@@ -1,4 +1,4 @@
-// swept collision detection logic
+// swept AABB collision detection logic for a moving ball & a static brick
 function sweptAABB(ball, brick, dt) {
     let dx = ball.dx * dt;
     let dy = ball.dy * dt;
@@ -53,4 +53,19 @@ function sweptAABB(ball, brick, dt) {
     }
 
     return { t: entryTime, normal: normal };
+}
+
+// Swept collision detection for the bat
+function SweptBatCollision(ball, dt) {
+    if (ball.dy <= 0) return null;
+    let dy = ball.dy * dt;
+    let t = (batY - (ball.y + ballSize)) / dy;
+    if (t < 0 || t > 1) return null;
+    let dx = ball.dx * dt;
+    let ballXAtCollision = ball.x + dx * t;
+    if (ballXAtCollision + ballSize < batX - batW / 2 ||
+        ballXAtCollision - ballSize > batX + batW / 2) {
+      return null;
+    }
+    return t;
 }
