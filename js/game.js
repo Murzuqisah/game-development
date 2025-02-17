@@ -29,4 +29,21 @@ document.addEventListener("DOMContentLoaded", function() {
         pauseButton.style.display = "inline-block";
         resumeButton.style.display = "none";
     }
+
+    // resume game
+    function resumeGame() {
+        if (gameState != "paused") return;
+        lastTime = performance.now();
+        accumulator = 0;
+        gameState = "running";
+        gameLoopID = requestAnimationFrame(gameLoop);
+        pauseButton.style.display = "inline-block";
+        resumeButton.style.display = "none";
+    }
+
+    function endGame() {
+        cancelAnimationFrame(gameLoopID);
+        gameState = "stopped";
+        showGameOvermessage();
+    }
 });
