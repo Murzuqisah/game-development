@@ -1,20 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/style.css">
-    <title>My Game</title>
+    <title>Arkanoid</title>
 </head>
+
 <body>
-    <h1>Arkanoid - Brick Breaker</h1>
+    <!-- welcome screen -->
+    <h1>Arkanoid</h1>
+    <div class="welcome-screen" id="welcomeScreen">
+        <div id="logoContainer">
+            <!-- welcome logo -->
+            <div class="playLogo">
+              <svg version="1.1" id="Logo2" xmlns="http://www.w3.org/2000/svg" 
+                   xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve">
+                <style type="text/css">
+                  .st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                </style>
+                <circle class="st0" cx="16" cy="7" r="4"/>
+                <path class="st0" d="M14,10.5V21l0,0c1.1,1.1,2.9,1.1,4,0l0,0V10.5"/>
+                <path class="st0" d="M14,19H8c-0.6,0-1.2,0.3-1.6,0.8L3,24v3c0,1.1,0.9,2,2,2h22c1.1,0,2-0.9,2-2v-3l-3.4-4.2
+                  c-0.4-0.5-1-0.8-1.6-0.8h-6"/>
+              </svg>
+            </div>
+              <!-- start button -->
+            <div class="startButton">
+              <button id="startWelcomeButton" onclick="startGame()">Start Game</button>
+            </div>
+    </div>
 
-    <img class="logo-img" id="logo-img" src="/assets/images/break-brick-breaker-gaming-retro-svgrepo-com.svg"></img>
+    <!-- Game Screen -->
+  <div id="gameScreen" style="display: none;">
+    <div id="gameContainer">
+      <!-- Level Display (shown above game area) -->
+      <div id="levelStep">Level: 1</div>
+      <!-- Heads-Up Display -->
+      <div id="hud">
+        <span id="scoreDisplay">Score: 0</span>
+        <span id="livesDisplay">Lives: 3</span>
+        <span id="fpsDisplay">FPS: 0</span>
+      </div>
+      <!-- Game Area -->
+      <div id="gameArea">
+        <div id="bat" class="bat"></div>
+      </div>
+      <!-- Controls -->
+      <div id="controls">
+        <button id="pauseButton" onclick="pauseGame()">Pause</button>
+        <button id="resumeButton" onclick="resumeGame()" style="display: none;">Resume</button>
+        <button id="endButton" onclick="endGame()">End</button>
+      </div>
+    </div>
+  </div>
 
-    
-    
-    <button id="start"><a href="/game-screen-1.html"></a>Start</button>
-    <img class="start-img" id="start-img" src="/assets/images/gamer-joystick-controller-svgrepo-com.svg">
-    <script src="game.js"></script>    
+    <script src="js/draw.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/move.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/update.js"></script>
+
+
 </body>
+
 </html>
