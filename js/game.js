@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
-    function startGame() {
+function startGame() {
     if (gameState === "running") return;
 
     // Display game screen
@@ -13,37 +12,36 @@ document.addEventListener("DOMContentLoaded", function() {
     accumulator = 0;
     gameState = "running";
     gameLoopID = requestAnimationFrame(gameLoop);
-    }
+}
 
-    window.startGame = startGame;
-    window.pauseGame = pauseGame;
-    window.resumeGame = resumeGame;
-    window.advanceLevel = advanceLevel;
-    window.endGame = endGame;
+window.startGame = startGame;
+window.pauseGame = pauseGame;
+window.resumeGame = resumeGame;
+window.advanceLevel = advanceLevel;
+window.endGame = endGame;
 
-    // pause game
-    function pauseGame() {
-        if (gameState == "paused") return;
-        cancelAnimationFrame(gameLoopID);
-        gameState = "paused";
-        pauseButton.style.display = "inline-block";
-        resumeButton.style.display = "none";
-    }
+// pause game
+function pauseGame() {
+    if (gameState == "paused") return;
+    cancelAnimationFrame(gameLoopID);
+    gameState = "paused";
+    pauseButton.style.display = "inline-block";
+    resumeButton.style.display = "none";
+}
 
-    // resume game
-    function resumeGame() {
-        if (gameState != "paused") return;
-        lastTime = performance.now();
-        accumulator = 0;
-        gameState = "running";
-        gameLoopID = requestAnimationFrame(gameLoop);
-        pauseButton.style.display = "inline-block";
-        resumeButton.style.display = "none";
-    }
+// resume game
+function resumeGame() {
+    if (gameState != "paused") return;
+    lastTime = performance.now();
+    accumulator = 0;
+    gameState = "running";
+    gameLoopID = requestAnimationFrame(gameLoop);
+    pauseButton.style.display = "inline-block";
+    resumeButton.style.display = "none";
+}
 
-    function endGame() {
-        cancelAnimationFrame(gameLoopID);
-        gameState = "stopped";
-        showGameOvermessage();
-    }
-});
+function endGame() {
+    cancelAnimationFrame(gameLoopID);
+    gameState = "stopped";
+    showGameOvermessage();
+}
