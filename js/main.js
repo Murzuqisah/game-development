@@ -1,13 +1,18 @@
-// Main entry point of the game
-// This file is responsible for setting up the game and starting the game loop
+// Create ball
+function createBall(x, y, dx, dy) {
+    var ballElem = document.createElement('div');
+    ballElem.className = 'ball';
+    gameArea.appendChild(ballElem);
+    return { x : x, y : y, dx: dx, dy : dy, elem: ballElem }
+}
 
-// Import the game class
-import Game from './init.js';
-
-// Create a new game object
-
-function updateGame() {
-    game.update();
+function removeBalls() {
+    ballSize.forEach(function(ball) {
+        if (ball.elem && ball.elem.parentNode) {
+            ball.elem.parentNode.removeChild(ball.elem);
+        }
+    })
+    balls = [];
 }
 
 requestAnimationFrame(gameLoop);
