@@ -12,8 +12,8 @@ const levelDisplay = document.getElementById('levelStep');
 
 
 // game area dimensions
-const gameWidth = 600;
-const gameHeight = 400;
+const gameWidth = 750;
+const gameHeight = 700;
 gameArea.style.width = gameWidth + 'px';
 gameArea.style.height = gameHeight + 'px';
 

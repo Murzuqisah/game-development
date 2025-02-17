@@ -7,19 +7,23 @@
 body {
     background: linear-gradient(135deg, #1d1f21, #343a40);
     color: #f1f1f1;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     min-height: 100vh;
-    padding: 20px;
+}
+
+#welcomeScreen {
+    text-align: center;
 }
 
 h1 {
+    top: auto;
     font-size: 3rem;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -28,23 +32,18 @@ p {
     margin: 20px 0;
 }
 
-.logo-img {
-    width: 380px;
-    height: 380px;
-}
-
 button {
+    margin-top: 7rem;
     background-color: #ff6f61;
-    columns: #fff;
+    color: #000;
     border: none;
-    padding: 15px 30px;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     cursor: pointer;
     height: 50px;
     width: 100px;
     border-radius: 7%;
     box-shadow: inset;
-    position: absolute;
+    position: relative;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -53,33 +52,49 @@ button:hover {
     transform: scale(1.05);
 }
 
-.start-img {
+.playLogo {
     width: 100px;
     height: auto;
-    margin-top: 20px;
     animation: slideIn 1.5s ease-in-out;
 }
 
-.game-logo {
-    width: 100px;
-    height: auto;
-    position: absolute;
-    top: 1rem;
-    align-items: center;
-    animation: fadeIn 1.5s ease-out;
+#gameContainer {
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
 }
 
+/* Level Display */
+#levelDisplay {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
 
+/* Heads-Up Display */
+#hud {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #222;
+}
+
+#hud span {
+    margin: 0 8px;
+    font-weight: 500;
+}
+
+/* Game Area */
 #gameArea {
     position: relative;
-    margin-top: 10px;
-    width: 1200px;
-    height: 800px;
-    margin: 20px auto;
-    background-color: #222;
-    border: 0.3rem solid #f9f9f9;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    height: 600px;
+    background: radial-gradient(circle, #fdfbfb, #ebedee);
+    border: 3px solid #444;
+    margin: 0 auto;
     overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .ball {
@@ -89,8 +104,8 @@ button:hover {
     background-color: red;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(244, 67, 54, 0.8);
-    top: 350px;
-    left: 290px;
+    /* top: 350px;
+    left: 290px; */
 }
 
 .bat {
@@ -107,41 +122,99 @@ button:hover {
     width: 70px;
     height: 30px;
     box-sizing: border-box;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
     border: 1px solid #000;
-    background-color: green;
+    background-color: #d97b54;
     top: 140px;
     left: 50px;
 }
 
-#hud {
-    margin-bottom: 10px;
-    width: 600px;
+/* Special Brick */
+.brick.special {
+    background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    border-color: #ff7f50;
+    box-shadow: inset 0 0 6px rgba(255, 127, 80, 0.8);
+}
+
+#controls {
+    margin-top: 12px;
+}
+
+#controls button {
+    margin: 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #ff6f61;
+    border: none;
+    border-radius: 4%;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+
+#controls button:hover {
+    background-color: #ff4a3d;
+    transform: scale(1.05);
+}
+
+/* Next Level Overlay */
+#levelOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
     display: flex;
-    font-size: 1.2rem;
-    padding: 0 10px;
-    margin-bottom: 20px;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 24px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    z-index: 10;
+    border-radius: 8px;
+}
+
+#levelOverlay button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #00c6ff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#levelOverlay button:hover {
+    background-color: #0072ff;
+    transform: scale(1.05);
 }
 
 /* Keyframes for animation */
 @keyframes fadeIn {
     from {
-      opacity: 0;
-      transform: scale(0.8);
+        opacity: 0;
+        transform: scale(0.8);
     }
+
     to {
-      opacity: 1;
-      transform: scale(1);
+        opacity: 1;
+        transform: scale(1);
     }
-  }
-  
-  @keyframes slideIn {
+}
+
+@keyframes slideIn {
     from {
-      opacity: 0;
-      transform: translateY(20px);
+        opacity: 0;
+        transform: translateY(20px);
     }
+
     to {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
+}
