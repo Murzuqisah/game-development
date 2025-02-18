@@ -161,6 +161,14 @@ function updateBalls() {
             }
         }
     });
+
+    balls = balls.filter(function (ball) {
+        return ball.y - ballSize <= gameHeight;
+    });
+
+    if (balls.length === 0) {
+        loseLife();
+    }
 }
 
 
