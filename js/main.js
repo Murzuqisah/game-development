@@ -171,5 +171,11 @@ function updateBalls() {
     }
 }
 
+function moveBat() {
+    batX += currentBatSpeed;
+    if (batX < batWidth / 2) batX = batWidth / 2;
+    if (batX > w - batWidth / 2) batX = w - batWidth / 2;
+}
+
 
 requestAnimationFrame(gameLoop);
