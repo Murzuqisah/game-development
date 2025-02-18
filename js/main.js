@@ -171,11 +171,21 @@ function updateBalls() {
     }
 }
 
+
+// update bat position
 function moveBat() {
     batX += currentBatSpeed;
     if (batX < batWidth / 2) batX = batWidth / 2;
     if (batX > w - batWidth / 2) batX = w - batWidth / 2;
 }
 
+function checkLevelCompletion() {
+    var allCleared = bricks.every(function (b) { return !b.active; })
+    if (allCleared) {
+        clearInterval(gameLoopTimer);
+        gameState = "paused";
+        showLevelCompletedOverlay();
+    }
+}
 
 requestAnimationFrame(gameLoop);
