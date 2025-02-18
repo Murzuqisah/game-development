@@ -1,8 +1,7 @@
-function updateGame() {
-  game.update();
-}
-
 function showLevelCompletedOverlay() {
+  if (!gameArea) {
+    console.error("Error: gameArea not found!")
+  }
   var overlay = document.createElement('div');
   overlay.id = "levelStep";
   overlay.innerHTML = `<div>Level Complete!</div>
