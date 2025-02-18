@@ -19,7 +19,7 @@ var ballX = gameWidth / 2 - ballSize / 2,
     ballSpeedY = 5;
 
 // array to hold bricks objects (x and y -> top left corner of the brick, active -> brick status)
-var brick = [x, y, active],
+var bricks = [x, y, active, changed, special],
     batX = gameWidth / 2 - batWidth / 2,
     batY = gameHeight - 50 - batHeight,
     batSpeed = 20;
