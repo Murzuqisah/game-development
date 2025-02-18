@@ -93,5 +93,22 @@ function updateHUD() {
     fpsDisplay.textContent = "FPS: " + fps;
 }
 
+function draw() {
+    balls.forEach(function (ball) {
+        ball.elem.style.left = (ball.x - ballSize) + 'px';
+        ball.elem.style.top = (ball.y - ballSize) + 'px';
+    });
+    batElem.style.left = (batX - batWidth / 2) + 'px';
+    batElem.style.top = batY + 'px';
+
+    bricks.forEach(function (b) {
+        if (b.changed) {
+            b.elem.visibility = b.active ? 'visible' : 'hidden';
+            b.changed = false;
+        }
+    });
+}
+
+
 
 requestAnimationFrame(gameLoop);
