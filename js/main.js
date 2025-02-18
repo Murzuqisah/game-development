@@ -6,7 +6,7 @@ function createBall(x, y, dx, dy) {
     return { x: x, y: y, dx: dx, dy: dy, elem: ballElem }
 }
 
-function removeBalls() {
+function removeAllBalls() {
     ballSize.forEach(function (ball) {
         if (ball.elem && ball.elem.parentNode) {
             ball.elem.parentNode.removeChild(ball.elem);
@@ -200,6 +200,23 @@ function advanceLevel() {
     initLevel();
     gameLoopTimer = setInterval(gameLoop, 16);
     gameState = "running";
+}
+
+function loseLife() {
+    lives--;
+    updateHUD();
+    if (lives <= 0) {
+        endGame();
+    } else {
+        clearInterval(gameLoopTimer);
+        removeAllBalls();
+        setTimeout(function () {
+            var speedMult = 1 + 0.5 * (currentLevel - 1);
+            balls.push(createBall(gameWidth / 2, gameHeight - 100, 45 * speedMult, -45 * speedMult));
+            gameLoopTimer = setInterval(gameLoop, 16);
+            gameState = "running";
+        }, 1000);
+    }
 }
 
 requestAnimationFrame(gameLoop);
