@@ -4,23 +4,23 @@ let previousTime = performance.now();
 let accumulator = 0;
 
 function gameLoop(currentTime) {
-    updateBalls();
-    moveBat();
-    draw();
-    checkLevelCompletion();
-    
-    frameCount++
     let frameTime = (currentTime - previousTime) / 1000;
-
-    frameTime = Math.min(frameTime, 0.1);
     previousTime = currentTime;
+    
+    
+    frameTime = Math.min(frameTime, 0.1);
     accumulator += frameTime;
-
+    
     while (accumulator >= TIME_STEP) {
         updateGame(TIME_STEP);
         accumulator -= TIME_STEP;
     }
+    
+    // updateBalls();
+    // moveBat();
+    // draw();
+    checkLevelCompletion();
 
-    renderGame();
-    requestAnimationFrame(gameLoop);
+    frameCount++
 };
+
