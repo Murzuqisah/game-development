@@ -4,6 +4,12 @@ let previousTime = performance.now();
 let accumulator = 0;
 
 function gameLoop(currentTime) {
+    updateBalls();
+    moveBat();
+    draw();
+    checkLevelCompletion();
+    
+    frameCount++
     let frameTime = (currentTime - previousTime) / 1000;
 
     frameTime = Math.min(frameTime, 0.1);
