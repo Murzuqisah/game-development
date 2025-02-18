@@ -7,7 +7,7 @@ function createBall(x, y, dx, dy) {
 }
 
 function removeAllBalls() {
-    ballSize.forEach(function (ball) {
+    balls.forEach(function (ball) {
         if (ball.elem && ball.elem.parentNode) {
             ball.elem.parentNode.removeChild(ball.elem);
         }
@@ -48,7 +48,7 @@ function createBricks() {
             var brickElem = document.createElement('div');
             brickElem.className = 'brick';
             brickElem.style.left = brick.x + 'px';
-            brick.style.right = brick.y + 'px';
+            brickElem.style.top = brick.y + 'px';
             brick.elem = brickElem;
             gameArea.appendChild(brickElem);
         };
@@ -65,16 +65,16 @@ function initLevel() {
     var overlay = document.getElementById("levelStep");
     if (overlay) overlay.remove();
 
-    // batX = w / 2;
-    // batY = h - 50
-    removeBalls();
+    // batX = gameWidth / 2;
+    // batY = gameHeight - 50
+    removeAllBalls();
 
     // ball speed increases with levels
     var speedMult = 1 + 0.5 * (currentLevel - 1);
     var initDx = 45 * speedMult;
     var initDy = -45 * speedMult;
 
-    balls.push(createBall(w / 2, h - 100, initDx, initDy));
+    balls.push(createBall(gameWidth / 2, gameHeight - 100, initDx, initDy));
 
     createBricks();
     updateHUD();
@@ -113,7 +113,7 @@ function updateBalls() {
     balls.forEach(function (ball) {
         var collisonHandled = false;
         // walls collision
-        if (balls.x - ballSize + ball.dx < 0 || balls.x + ballSize + ball.dx > w) {
+        if (ball.x - ballSize + ball.dx < 0 || ball.x + ballSize + ball.dx > gameWidth) {
             ball.dx = -ball.dx;
         }
 
@@ -174,15 +174,15 @@ function updateBalls() {
 
 // update bat position
 function moveBat() {
-    batX += currentBatSpeed;
+    batX += batSpeed;
     if (batX < batWidth / 2) batX = batWidth / 2;
-    if (batX > w - batWidth / 2) batX = w - batWidth / 2;
+    if (batX > gameWidth - batWidth / 2) batX = gameWidth - batWidth / 2;
 }
 
 function checkLevelCompletion() {
     var allCleared = bricks.every(function (b) { return !b.active; })
     if (allCleared) {
-        clearInterval(gameLoopTimer);
+        clearInterval(gameLoopID);
         gameState = "paused";
         showLevelCompletedOverlay();
     }
@@ -198,7 +198,7 @@ function advanceLevel() {
         return;
     }
     initLevel();
-    gameLoopTimer = setInterval(gameLoop, 16);
+    gameLoopID = setInterval(gameLoop, 16);
     gameState = "running";
 }
 
@@ -207,13 +207,14 @@ function loseLife() {
     updateHUD();
     if (lives <= 0) {
         endGame();
+        gameState = "stopped"
     } else {
-        clearInterval(gameLoopTimer);
+        clearInterval(gameLoopID);
         removeAllBalls();
         setTimeout(function () {
             var speedMult = 1 + 0.5 * (currentLevel - 1);
             balls.push(createBall(gameWidth / 2, gameHeight - 100, 45 * speedMult, -45 * speedMult));
-            gameLoopTimer = setInterval(gameLoop, 16);
+            gameLoopID = setInterval(gameLoop, 16);
             gameState = "running";
         }, 1000);
     }
