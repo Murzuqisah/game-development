@@ -188,4 +188,18 @@ function checkLevelCompletion() {
     }
 }
 
+function advanceLevel() {
+    var overlay = document.getElementById("levelStep");
+    if (overlay) overlay.remove();
+    currentLevel++
+    if (currentLevel > maxLevel) {
+        showGameOverMessage("Congratulations! You completed all levels!");
+        gameState = "stopped";
+        return;
+    }
+    initLevel();
+    gameLoopTimer = setInterval(gameLoop, 16);
+    gameState = "running";
+}
+
 requestAnimationFrame(gameLoop);
