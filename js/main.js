@@ -60,6 +60,38 @@ function createBricks() {
     }
 };
 
+function initLevel() {
+    // remove any level overlay
+    var overlay = document.getElementById("levelStep");
+    if (overlay) overlay.remove();
+
+    // batX = w / 2;
+    // batY = h - 50
+    removeBalls();
+
+    // ball speed increases with levels
+    var speedMult = 1 + 0.5 * (currentLevel - 1);
+    var initDx = 45 * speedMult;
+    var initDy = -45 * speedMult;
+
+    balls.push(createBall(w / 2, h - 100, initDx, initDy));
+
+    createBricks();
+    updateHUD();
+
+    // set bat element position
+    batElem.style.left = (batX - batWidth / 2) + 'px';
+    batElem.style.top = batY + 'px';
+
+    // update level display
+    levelDisplay.textContent = "Level: " + currentLevel;
+}
+
+function updateHUD() {
+    scoreDisplay.textContent = "Score: " + score;
+    livesDisplay.textContent = "Lives: " + lives;
+    fpsDisplay.textContent = "FPS: " + fps;
+}
 
 
 requestAnimationFrame(gameLoop);
