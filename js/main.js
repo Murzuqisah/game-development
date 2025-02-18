@@ -109,6 +109,59 @@ function draw() {
     });
 }
 
+function updateBalls() {
+    balls.forEach(function (ball) {
+        var collisonHandled = false;
+        // walls collision
+        if (balls.x - ballSize + ball.dx < 0 || balls.x + ballSize + ball.dx > w) {
+            ball.dx = -ball.dx;
+        }
+
+        // top collision
+        if (ball.y - ballSize + ball.dy < 0) {
+            ball.dy = -ball.dy;
+        }
+
+        // bat collision
+        if (ball.dy > 0 &&
+            ball.y + ballSize >= batY &&
+            ball.y + ballSize - ball.dy < batY &&
+            ball.x + ballSize > batX - batWidth / 2 &&
+            ball.x - ballSize < batX + batWidth / 2) {
+            ball.y = batY - ballSize;
+            ball.dy = -ball.dy;
+            collisonHandled = true;
+        }
+
+        // update ball position
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        // brick collision
+        if (!collisonHandled) {
+            for (var i = 0; i < bricks.length; i++) {
+                var b = bricks[i];
+                if (!b.active) continue;
+                if (b.x < ball.x + ballSize &&
+                    ball.x - ballSize < b.x + brickWidth &&
+                    b.y < ball.y + ballSize &&
+                    ball.y - ballSize < b.y + brickHeight
+                ) {
+                    b.active = false;
+                    b.changed = true;
+                    ball.dy = -ball.dy;
+                    score += 10;
+                    updateHUD();
+                    // for special brick, spawn a bonus ball
+                    if (b.special) {
+                        balls.push(createBall(b.x + brickWidth / 2, b.y + brickHeight / 2, ball.dx, ball.dy));
+                    }
+                    break;
+                }
+            }
+        }
+    });
+}
 
 
 requestAnimationFrame(gameLoop);
