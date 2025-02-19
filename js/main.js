@@ -1,9 +1,9 @@
 // Create ball
 function createBall(x, y, dx, dy) {
-    var ballElem = document.createElement('div');
+    const ballElem = document.createElement('div');
     ballElem.className = 'ball';
     gameArea.appendChild(ballElem);
-    return { x: x, y: y, dx: dx, dy: dy, elem: ballElem }
+    return { x, y, dx, dy, elem: ballElem };
 }
 
 function removeAllBalls() {
@@ -21,7 +21,7 @@ function createBricks() {
     document.querySelectorAll('.brick').forEach(br => br.remove());
 
     // define level-based parameters
-    var rows, cols, xOffset, yOffset, gap;
+    let rows, cols, xOffset, yOffset, gap;
     if (currentLevel === 1) {
         rows = 4; cols = 10; xOffset = 50; yOffset = 50; gap = 0;
     } else if (currentLevel === 2) {
@@ -35,9 +35,9 @@ function createBricks() {
     }
 
     // creating grid-like brick layout
-    for (var r = 0; r < rows; r++) {
-        for (var c = 0; c < cols; c++) {
-            var brick = {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            let brick = {
                 x: xOffset + c * (brickWidth + gap),
                 y: yOffset + r * (brickHeight + gap),
                 active: true,
@@ -45,7 +45,7 @@ function createBricks() {
                 special: false
             };
             bricks.push(brick);
-            var brickElem = document.createElement('div');
+            let brickElem = document.createElement('div');
             brickElem.className = 'brick';
             brickElem.style.left = brick.x + 'px';
             brickElem.style.top = brick.y + 'px';
@@ -54,7 +54,7 @@ function createBricks() {
         };
     }
     if (bricks.length > 0) {
-        var specialIndex = Math.floor(Math.random() * bricks.length);
+        let specialIndex = Math.floor(Math.random() * bricks.length);
         bricks[specialIndex].special = true;
         bricks[specialIndex].elem.classList.add("special");
     }
@@ -62,17 +62,17 @@ function createBricks() {
 
 function initLevel() {
     // remove any level overlay
-    var overlay = document.getElementById("levelStep");
+    let overlay = document.getElementById("levelStep");
     if (overlay) overlay.remove();
 
-    // batX = gameWidth / 2;
-    // batY = gameHeight - 50
+    batX = gameWidth / 2;
+    batY = gameHeight - 50
     removeAllBalls();
 
     // ball speed increases with levels
-    var speedMult = 1 + 0.5 * (currentLevel - 1);
-    var initDx = 45 * speedMult;
-    var initDy = -45 * speedMult;
+    let speedMult = 1 + 0.5 * (currentLevel - 1);
+    let initDx = 45 * speedMult;
+    let initDy = -45 * speedMult;
 
     balls.push(createBall(gameWidth / 2, gameHeight - 100, initDx, initDy));
 
@@ -111,7 +111,6 @@ function draw() {
 
 function updateBalls() {
     balls.forEach(function (ball) {
-        var collisonHandled = false;
         // walls collision
         if (ball.x - ballSize + ball.dx < 0 || ball.x + ballSize + ball.dx > gameWidth) {
             ball.dx = -ball.dx;
@@ -139,8 +138,8 @@ function updateBalls() {
 
         // brick collision
         if (!collisonHandled) {
-            for (var i = 0; i < bricks.length; i++) {
-                var b = bricks[i];
+            for (let i = 0; i < bricks.length; i++) {
+                let b = bricks[i];
                 if (!b.active) continue;
                 if (b.x < ball.x + ballSize &&
                     ball.x - ballSize < b.x + brickWidth &&
@@ -160,16 +159,16 @@ function updateBalls() {
                 }
             }
         }
-    });
+        balls = balls.filter(function (ball) {
+            return ball.y - ballSize <= gameHeight;
+        });
 
-    balls = balls.filter(function (ball) {
-        return ball.y - ballSize <= gameHeight;
+        if (balls.length === 0) {
+            loseLife();
+        }
     });
-
-    if (balls.length === 0) {
-        loseLife();
-    }
 }
+
 
 
 // update bat position
@@ -180,16 +179,16 @@ function moveBat() {
 }
 
 function checkLevelCompletion() {
-    var allCleared = bricks.every(function (b) { return !b.active; })
+    let allCleared = bricks.every(function (b) { return !b.active; })
     if (allCleared) {
-        clearInterval(gameLoopID);
+        cancelAnimationFrame(gameLoopID);
         gameState = "paused";
         showLevelCompletedOverlay();
     }
 }
 
 function advanceLevel() {
-    var overlay = document.getElementById("levelStep");
+    let overlay = document.getElementById("levelStep");
     if (overlay) overlay.remove();
     currentLevel++
     if (currentLevel > maxLevel) {
@@ -208,11 +207,12 @@ function loseLife() {
     if (lives <= 0) {
         endGame();
         gameState = "stopped"
+        // gameEndedOverlay();
     } else {
-        clearInterval(gameLoopID);
+        cancelAnimationFrame(gameLoopID);
         removeAllBalls();
         setTimeout(function () {
-            var speedMult = 1 + 0.5 * (currentLevel - 1);
+            let speedMult = 1 + 0.5 * (currentLevel - 1);
             balls.push(createBall(gameWidth / 2, gameHeight - 100, 45 * speedMult, -45 * speedMult));
             gameLoopID = setInterval(gameLoop, 16);
             gameState = "running";
@@ -220,4 +220,4 @@ function loseLife() {
     }
 }
 
-requestAnimationFrame(gameLoop);
+

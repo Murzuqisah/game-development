@@ -2,7 +2,6 @@ function startGame() {
     if (gameState === "running") { console.log("game already running"); return };
     console.log("startGame() called")
     // Display game screen
-
     console.log("Starting game...");
     document.getElementById("welcomeScreen").style.display = "none";
     document.getElementById("gameScreen").style.display = "block";
@@ -14,6 +13,10 @@ function startGame() {
     accumulator = 0;
     gameState = "running";
     gameLoopID = requestAnimationFrame(gameLoop);
+
+    startButton.style.display = "none";
+    pauseButton.style.display = "inline-block";
+    endButton.style.display = "inline-block";
 }
 
 
@@ -41,6 +44,7 @@ function endGame() {
     cancelAnimationFrame(gameLoopID);
     gameState = "stopped";
     showGameOverMessage("Game Over!");
+    gameEndedOverlay();
 }
 
 function All() {

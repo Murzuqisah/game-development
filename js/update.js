@@ -33,3 +33,15 @@ function showGameOverMessage(msg) {
     endButton.style.display = "none";
   }, 3000);
 }
+
+function gameEndedOverlay() {
+  if (!gameArea) {
+    console.error('gameArea not found!')
+  }
+
+  let overlay = document.createElement('div')
+  overlay.id = 'levelStep';
+  overlay.innerHTML = `<div> You died </div>
+                        <button onclick=startGame()> Restart Game </button>`;
+  gameArea.appendChild(overlay);
+}
