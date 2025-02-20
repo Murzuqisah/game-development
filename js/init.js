@@ -48,4 +48,5 @@ export let lastFPSTime = performance.now(),
     fps = 0;
 
 // Game control variables
-export let gameLoopID = null, accumulator = 0;
+export let gameLoopID = null;
+export let accumulator = 0;

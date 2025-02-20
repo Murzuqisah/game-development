@@ -1,23 +1,20 @@
+import { balls, bricks, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth } from "./init.js";
+
 // Create ball
-function createBall(x, y, dx, dy) {
+const createBall = (x, y, dx, dy) => {
     const ballElem = document.createElement('div');
     ballElem.className = 'ball';
     gameArea.appendChild(ballElem);
     return { x, y, dx, dy, elem: ballElem };
 }
 
-function removeAllBalls() {
-    balls.forEach(function (ball) {
-        if (ball.elem && ball.elem.parentNode) {
-            ball.elem.parentNode.removeChild(ball.elem);
-        }
-    })
-    balls = [];
+const removeAllBalls = () => {
+    balls.forEach(ball => ball.elem.remove());
+    balls.length = 0;
 }
 
 function createBricks() {
-    bricks = [];
-
+    bricks.splice(0, bricks.length);
     document.querySelectorAll('.brick').forEach(br => br.remove());
 
     // define level-based parameters
@@ -221,3 +218,4 @@ function loseLife() {
 }
 
 
+export { createBall, createBricks, removeAllBalls, initLevel };

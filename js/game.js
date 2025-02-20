@@ -1,27 +1,29 @@
-function startGame() {
+import { gameState, gameLoopID, accumulator } from "./init.js";
+import { gameLoop } from "./animation.js";
+import { initLevel, removeAllBalls } from "./main.js"
+import { startWelcomeButton, pauseButton, endButton, resumeButton } from "./init.js"
+
+const startGame = () => {
     if (gameState === "running") { console.log("game already running"); return };
     console.log("startGame() called")
     // Display game screen
     console.log("Starting game...");
     document.getElementById("welcomeScreen").style.display = "none";
     document.getElementById("gameScreen").style.display = "block";
-    score = 0;
-    lives = 3;
-    currentLevel = 1;
+
     initLevel();
-    lastFPSTime = performance.now();
     accumulator = 0;
     gameState = "running";
     gameLoopID = requestAnimationFrame(gameLoop);
 
-    startButton.style.display = "none";
+    startWelcomeButton.style.display = "none";
     pauseButton.style.display = "inline-block";
     endButton.style.display = "inline-block";
 }
 
 
 // pause game
-function pauseGame() {
+const pauseGame = () => {
     if (gameState == "paused") return;
     cancelAnimationFrame(gameLoopID);
     gameState = "paused";
@@ -30,7 +32,7 @@ function pauseGame() {
 }
 
 // resume game
-function resumeGame() {
+const resumeGame = () => {
     if (gameState != "paused") return;
     lastFPSTime = performance.now();
     accumulator = 0;
@@ -40,14 +42,14 @@ function resumeGame() {
     resumeButton.style.display = "none";
 }
 
-function endGame() {
+const endGame = () => {
     cancelAnimationFrame(gameLoopID);
     gameState = "stopped";
     showGameOverMessage("Game Over!");
     gameEndedOverlay();
 }
 
-function All() {
+const All = () => {
     window.startGame = startGame;
     window.pauseGame = pauseGame;
     window.resumeGame = resumeGame;
@@ -56,7 +58,7 @@ function All() {
 
 };
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     startButton.addEventListener("click", startGame);
     pauseButton.addEventListener("click", pauseGame);
     resumeButton.addEventListener("click", resumeGame);
@@ -64,3 +66,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 window.onload = All;
+
+export { startGame, pauseGame, resumeGame, endGame };

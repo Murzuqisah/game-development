@@ -1,12 +1,11 @@
-import {gameState, gameLoopID, accumulator, lastFPSTime, fps, frameCount} from "./init.js";
+import { gameState, gameLoopID, accumulator, lastFPSTime, fps, frameCount } from "./init.js";
 import { updateGame } from "./move.js"
 import { draw, updateHUD } from "./main.js"
 
-// Use a fixed timestep: 16.67ms per frame (i.e., 1/60 sec)
-const TIME_STEP_MS = 1000 / 60;  // ~16.67ms
-const TIME_STEP_S = 1 / 60;      // ~0.01667 seconds
+const TIME_STEP_MS = 1000 / 60;
+const TIME_STEP_S = 1 / 60;
 
-let previousTime = performance.now(); // in ms
+let previousTime = performance.now();
 
 const gameLoop = (currentTime) => {
     if (gameState !== 'running') return;
@@ -34,8 +33,5 @@ const gameLoop = (currentTime) => {
     // Request the next frame.
     gameLoopID = requestAnimationFrame(gameLoop);
 };
-
-
-
 
 export { gameLoop };
