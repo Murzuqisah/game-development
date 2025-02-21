@@ -32,21 +32,19 @@ export const ballSize = 80,
 
 // array to hold bricks objects (x and y -> top left corner of the brick, active -> brick status)
 export let bricks = [],
-    balls = [],
-    batX = gameWidth / 2 - batWidth / 2,
-    batY = gameHeight - 50 - batHeight,
-    batSpeed = 20;
+           balls = [],
+           batSpeed = 20;
 
 export let score = 0,
     currentLevel = 1,
     lives = 3,
-    levelStep = 5,
-    gameState = "stopped";
-
+    levelStep = 5;
+    
 export let lastFPSTime = performance.now(),
-    frameCount = 0,
-    fps = 0;
+            frameCount = 0,
+            fps = 0;
 
 // Game control variables
-export let gameLoopID = null;
-export let accumulator = 0;
+export let gameLoopID = { value: null};
+export let accumulator = { value: 0 };
+export let gameState = { value: "stopped" };
