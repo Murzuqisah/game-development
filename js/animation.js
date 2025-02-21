@@ -8,30 +8,28 @@ const TIME_STEP_S = 1 / 60;
 let previousTime = performance.now();
 
 export const gameLoop = (currentTime) => {
-    if (gameState !== 'running') return;
+    if (gameState.value !== 'running') return;
 
     let frameTime = currentTime - previousTime;
     previousTime = currentTime;
     frameTime = Math.min(frameTime, 100);
-    accumulator += frameTime;
+    accumulator.value += frameTime;
 
-    while (accumulator >= TIME_STEP_MS) {
+    while (accumulator.value >= TIME_STEP_MS) {
         updateGame(TIME_STEP_S);
-        accumulator -= TIME_STEP_MS;
+        accumulator.value -= TIME_STEP_MS;
     }
 
     draw();
-    frameCount++;
+    frameCount.value++;
     let now = performance.now();
     if (now - lastFPSTime >= 1000) {
-        fps = frameCount;
-        frameCount = 0;
-        lastFPSTime = now;
+        fps.value = frameCount.value;
+        frameCount.value = 0;
+        lastFPSTime.value = now;
         updateHUD();
     }
 
     // Request the next frame.
-    gameLoopID = requestAnimationFrame(gameLoop);
+    gameLoopID.value = requestAnimationFrame(gameLoop);
 };
-
-// export { gameLoop };
