@@ -1,4 +1,5 @@
-function updateGame(deltaTime) {
+import { balls } from "./init.js";
+export function updateGame(deltaTime) {
     for (let ball of balls) {
         let dx = ball.dx * deltaTime;
         let dy = ball.dy * deltaTime;
