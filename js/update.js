@@ -47,5 +47,3 @@ export function gameEndedOverlay() {
                         <button onclick=startGame()> Restart Game </button>`;
   gameArea.appendChild(overlay);
 }
-
-// export { showLevelCompletedOverlay, showGameOverMessage,gameEndedOverlay };
