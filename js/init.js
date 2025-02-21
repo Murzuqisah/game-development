@@ -1,4 +1,5 @@
 export const gameScreen = document.getElementById('gameScreen');
+export const welcomeScreen = document.getElementById('welcomeScreen');
 export const gameArea = document.getElementById('gameArea');
 export const batElem = document.getElementById('bat');
 export const scoreDisplay = document.getElementById('scoreDisplay');
@@ -40,11 +41,11 @@ export let score = 0,
     lives = 3,
     levelStep = 5;
     
-export let lastFPSTime = performance.now(),
-            frameCount = 0,
-            fps = 0;
+export let lastFPSTime = { value: performance.now()};
 
 // Game control variables
+export let fps = { value: 0}
+export let frameCount = { value: 0};
 export let gameLoopID = { value: null};
 export let accumulator = { value: 0 };
 export let gameState = { value: "stopped" };
