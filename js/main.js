@@ -1,19 +1,20 @@
-import { balls, bricks, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth } from "./init.js";
+import { balls, bricks, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, levelDisplay } from "./init.js";
+// import { initLevel }
 
 // Create ball
-const createBall = (x, y, dx, dy) => {
+export const createBall = (x, y, dx, dy) => {
     const ballElem = document.createElement('div');
     ballElem.className = 'ball';
     gameArea.appendChild(ballElem);
     return { x, y, dx, dy, elem: ballElem };
 }
 
-const removeAllBalls = () => {
+export const removeAllBalls = () => {
     balls.forEach(ball => ball.elem.remove());
     balls.length = 0;
 }
 
-function createBricks() {
+export function createBricks() {
     bricks.splice(0, bricks.length);
     document.querySelectorAll('.brick').forEach(br => br.remove());
 
@@ -57,13 +58,13 @@ function createBricks() {
     }
 };
 
-function initLevel() {
+export function initLevel() {
     // remove any level overlay
     let overlay = document.getElementById("levelStep");
     if (overlay) overlay.remove();
 
-    batX = gameWidth / 2;
-    batY = gameHeight - 50
+    let batX = gameWidth / 2;
+    let batY = gameHeight - 50
     removeAllBalls();
 
     // ball speed increases with levels
@@ -84,13 +85,13 @@ function initLevel() {
     levelDisplay.textContent = "Level: " + currentLevel;
 }
 
-function updateHUD() {
+export function updateHUD() {
     scoreDisplay.textContent = "Score: " + score;
     livesDisplay.textContent = "Lives: " + lives;
     fpsDisplay.textContent = "FPS: " + fps;
 }
 
-function draw() {
+export function draw() {
     balls.forEach(function (ball) {
         ball.elem.style.left = (ball.x - ballSize) + 'px';
         ball.elem.style.top = (ball.y - ballSize) + 'px';
@@ -106,7 +107,7 @@ function draw() {
     });
 }
 
-function updateBalls() {
+export function updateBalls() {
     balls.forEach(function (ball) {
         // walls collision
         if (ball.x - ballSize + ball.dx < 0 || ball.x + ballSize + ball.dx > gameWidth) {
@@ -169,13 +170,13 @@ function updateBalls() {
 
 
 // update bat position
-function moveBat() {
+export function moveBat() {
     batX += batSpeed;
     if (batX < batWidth / 2) batX = batWidth / 2;
     if (batX > gameWidth - batWidth / 2) batX = gameWidth - batWidth / 2;
 }
 
-function checkLevelCompletion() {
+export function checkLevelCompletion() {
     let allCleared = bricks.every(function (b) { return !b.active; })
     if (allCleared) {
         cancelAnimationFrame(gameLoopID);
@@ -184,7 +185,7 @@ function checkLevelCompletion() {
     }
 }
 
-function advanceLevel() {
+export function advanceLevel() {
     let overlay = document.getElementById("levelStep");
     if (overlay) overlay.remove();
     currentLevel++
@@ -198,7 +199,7 @@ function advanceLevel() {
     gameState = "running";
 }
 
-function loseLife() {
+export function loseLife() {
     lives--;
     updateHUD();
     if (lives <= 0) {
@@ -218,4 +219,4 @@ function loseLife() {
 }
 
 
-export { createBall, createBricks, removeAllBalls, initLevel };
+// export { createBall, createBricks, removeAllBalls, initLevel, draw, updateBalls, moveBat, checkLevelCompletion, advanceLevel, updateHUD,  updateGame, loseLife };
