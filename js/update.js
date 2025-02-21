@@ -1,4 +1,6 @@
-function showLevelCompletedOverlay() {
+import { gameArea, startButton, pauseButton, resumeButton, endButton } from "./init.js";
+
+export function showLevelCompletedOverlay() {
   if (!gameArea) {
     console.error("Error: gameArea not found!")
   }
@@ -9,7 +11,7 @@ function showLevelCompletedOverlay() {
   gameArea.appendChild(overlay);
 }
 
-function showGameOverMessage(msg) {
+export function showGameOverMessage(msg) {
   let gameOverElem = document.createElement('div');
   gameOverElem.id = 'gameOverMessage';
   gameOverElem.innerHTML = msg || 'Game Over!';
@@ -34,7 +36,7 @@ function showGameOverMessage(msg) {
   }, 3000);
 }
 
-function gameEndedOverlay() {
+export function gameEndedOverlay() {
   if (!gameArea) {
     console.error('gameArea not found!')
   }
@@ -45,3 +47,5 @@ function gameEndedOverlay() {
                         <button onclick=startGame()> Restart Game </button>`;
   gameArea.appendChild(overlay);
 }
+
+// export { showLevelCompletedOverlay, showGameOverMessage,gameEndedOverlay };
