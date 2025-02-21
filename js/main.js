@@ -1,6 +1,9 @@
 import { balls, bricks, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, levelDisplay } from "./init.js";
 // import { initLevel }
 
+let batX = gameWidth / 2;
+let batY = gameHeight - 50
+
 // Create ball
 export const createBall = (x, y, dx, dy) => {
     const ballElem = document.createElement('div');
@@ -179,8 +182,8 @@ export function moveBat() {
 export function checkLevelCompletion() {
     let allCleared = bricks.every(function (b) { return !b.active; })
     if (allCleared) {
-        cancelAnimationFrame(gameLoopID);
-        gameState = "paused";
+        cancelAnimationFrame(gameLoopID.value);
+        gameState.value = "paused";
         showLevelCompletedOverlay();
     }
 }
@@ -191,12 +194,12 @@ export function advanceLevel() {
     currentLevel++
     if (currentLevel > maxLevel) {
         showGameOverMessage("Congratulations! You completed all levels!");
-        gameState = "stopped";
+        gameState.value = "stopped";
         return;
     }
     initLevel();
-    gameLoopID = setInterval(gameLoop, 16);
-    gameState = "running";
+    gameLoopID.value = setInterval(gameLoop, 16);
+    gameState.value = "running";
 }
 
 export function loseLife() {
@@ -204,16 +207,16 @@ export function loseLife() {
     updateHUD();
     if (lives <= 0) {
         endGame();
-        gameState = "stopped"
+        gameState.value = "stopped"
         // gameEndedOverlay();
     } else {
-        cancelAnimationFrame(gameLoopID);
+        cancelAnimationFrame(gameLoopID.value);
         removeAllBalls();
         setTimeout(function () {
             let speedMult = 1 + 0.5 * (currentLevel - 1);
             balls.push(createBall(gameWidth / 2, gameHeight - 100, 45 * speedMult, -45 * speedMult));
-            gameLoopID = setInterval(gameLoop, 16);
-            gameState = "running";
+            gameLoopID.value = setInterval(gameLoop, 16);
+            gameState.value = "running";
         }, 1000);
     }
 }
