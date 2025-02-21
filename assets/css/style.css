@@ -84,6 +84,12 @@ button:hover {
     font-weight: 500;
 }
 
+
+#gameScreen {
+    display: none;
+    visibility: hidden;
+}
+
 /* Game Area */
 #gameArea {
     position: relative;
@@ -115,6 +121,7 @@ button:hover {
     background-color: blue;
     bottom: 175px;
     left: 250px;
+    transform: translateX(-50%);
 }
 
 .brick {
