@@ -1,9 +1,8 @@
-import { gameState, gameLoopID, accumulator } from "./init.js";
+import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator } from "./init.js"
 import { gameLoop } from "./animation.js";
-import { initLevel, removeAllBalls } from "./main.js"
-import { startWelcomeButton, pauseButton, endButton, resumeButton } from "./init.js"
+import { initLevel, advanceLevel } from "./main.js"
 
-const startGame = () => {
+export const startGame = () => {
     if (gameState === "running") { console.log("game already running"); return };
     console.log("startGame() called")
     // Display game screen
@@ -12,9 +11,9 @@ const startGame = () => {
     document.getElementById("gameScreen").style.display = "block";
 
     initLevel();
-    accumulator = 0;
-    gameState = "running";
-    gameLoopID = requestAnimationFrame(gameLoop);
+    gameState.value = "running";
+    accumulator.value = 0;
+    gameLoopID.value = requestAnimationFrame(gameLoop);
 
     startWelcomeButton.style.display = "none";
     pauseButton.style.display = "inline-block";
@@ -23,27 +22,27 @@ const startGame = () => {
 
 
 // pause game
-const pauseGame = () => {
+export const pauseGame = () => {
     if (gameState == "paused") return;
-    cancelAnimationFrame(gameLoopID);
+    cancelAnimationFrame(gameLoopID.value);
     gameState = "paused";
     pauseButton.style.display = "none";
     resumeButton.style.display = "inline-block";
 }
 
 // resume game
-const resumeGame = () => {
+export const resumeGame = () => {
     if (gameState != "paused") return;
     lastFPSTime = performance.now();
     accumulator = 0;
     gameState = "running";
-    gameLoopID = requestAnimationFrame(gameLoop);
+    gameLoopID.value = requestAnimationFrame(gameLoop);
     pauseButton.style.display = "inline-block";
     resumeButton.style.display = "none";
 }
 
-const endGame = () => {
-    cancelAnimationFrame(gameLoopID);
+export const endGame = () => {
+    cancelAnimationFrame(gameLoopID.value);
     gameState = "stopped";
     showGameOverMessage("Game Over!");
     gameEndedOverlay();
@@ -67,4 +66,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.onload = All;
 
-export { startGame, pauseGame, resumeGame, endGame };
+// script
+// script.type = "module"
