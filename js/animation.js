@@ -7,7 +7,7 @@ const TIME_STEP_S = 1 / 60;
 
 let previousTime = performance.now();
 
-const gameLoop = (currentTime) => {
+export const gameLoop = (currentTime) => {
     if (gameState !== 'running') return;
 
     let frameTime = currentTime - previousTime;
@@ -34,4 +34,4 @@ const gameLoop = (currentTime) => {
     gameLoopID = requestAnimationFrame(gameLoop);
 };
 
-export { gameLoop };
+// export { gameLoop };
