@@ -1,7 +1,7 @@
 * {
-    box-sizing: border-box;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -12,11 +12,11 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
     min-height: 100vh;
 }
 
 #welcomeScreen {
+    justify-content: center;
     text-align: center;
 }
 
@@ -107,33 +107,30 @@ button:hover {
     position: absolute;
     width: 20px;
     height: 20px;
-    background-color: red;
+    background: radial-gradient(circle, #fa0004, #f92323);
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(244, 67, 54, 0.8);
-    /* top: 350px;
-    left: 290px; */
 }
 
 .bat {
     position: absolute;
-    width: 80px;
-    height: 10px;
-    background-color: blue;
-    bottom: 175px;
-    left: 250px;
+    width: 5rem;
+    height: 1.5rem;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     transform: translateX(-50%);
 }
 
 .brick {
     position: absolute;
-    width: 70px;
-    height: 30px;
+    width: 30px;
+    height: 20px;
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    border: 1.5px solid #d97b54;
+    border-radius: 2px;
     box-sizing: border-box;
     box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
-    border: 1px solid #000;
-    background-color: #d97b54;
-    top: 140px;
-    left: 50px;
 }
 
 /* Special Brick */
@@ -226,3 +223,25 @@ button:hover {
     }
 }
 
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    #gameArea {
+        width: 300px;
+        height: 450px;
+    }
+
+    .bat {
+        width: 75px;
+        height: 18px;
+    }
+
+    .ball {
+        width: 15px;
+        height: 15px;
+    }
+
+    .brick {
+        width: 25px;
+        height: 18px;
+    }
+}
