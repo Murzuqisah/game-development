@@ -38,36 +38,36 @@
         <button id="startWelcomeButton" onclick="startGame()">Start Game</button>
       </div>
     </div>
+  </div>
 
-    <!-- Game Screen -->
-    <div id="gameScreen">
-      <div id="gameContainer">
-        <!-- Level Display (shown above game area) -->
-        <div id="levelStep">Level: 1</div>
-        <!-- Heads-Up Display -->
-        <div id="hud">
-          <span id="scoreDisplay">Score: 0</span>
-          <span id="livesDisplay">Lives: 3</span>
-          <span id="fpsDisplay">FPS: 0</span>
-        </div>
-        <!-- Game Area -->
-        <div id="gameArea">
-          <div id="bat" class="bat"></div>
-        </div>
-        <!-- Controls -->
-        <div id="controls">
-          <button id="pauseButton" onclick="pauseGame()">Pause</button>
-          <button id="resumeButton" onclick="resumeGame()" style="display: none;">Resume</button>
-          <button id="endButton" onclick="endGame()">End</button>
-        </div>
+  <!-- Game Screen -->
+  <div id="gameScreen">
+    <div id="gameContainer">
+      <!-- Level Display (shown above game area) -->
+      <div id="levelStep">Level: 1</div>
+      <!-- Heads-Up Display -->
+      <div id="hud">
+        <span id="scoreDisplay">Score: 0</span>
+        <span id="livesDisplay">Lives: 3</span>
+        <span id="fpsDisplay">FPS: 0</span>
+      </div>
+      <!-- Game Area -->
+      <div id="gameArea">
+        <div id="bat" class="bat"></div>
+      </div>
+      <!-- Controls -->
+      <div id="controls">
+        <button id="pauseButton" onclick="pauseGame()">Pause</button>
+        <button id="resumeButton" onclick="resumeGame()" style="display: none;">Resume</button>
+        <button id="endButton" onclick="endGame()">End</button>
       </div>
     </div>
 
     <script type="module" src="js/init.js" defer></script>
     <script type="module" src="js/game.js" defer></script>
+    <script type="module" src="js/player.js"></script>
     <script type="module" src="js/animation.js"></script>
     <script type="module" src="js/move.js"></script>
-    <script type="module" src="js/player.js"></script>
     <script type="module" src="js/update.js"></script>
     <script type="module" src="js/main.js" defer></script>
 
