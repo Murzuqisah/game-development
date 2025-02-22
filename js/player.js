@@ -1,15 +1,13 @@
 document.addEventListener('keydown', function (e) {
     switch (e.code) {
         case 'ArrowLeft':
-            player.moveLeft();
+            bat.moveLeft(); // Move the bat left
             break;
         case 'ArrowRight':
-            player.moveRight();
+            bat.moveRight(); // Move the bat right
             break;
-        case (e.code === 'Space'):
-            if (player.isJumping === false) {
-                player.isJumping = true;
-                player.jump();
-            }
+        case 'ArrowUp':
+            ball.moveUp(); // Move the ball upwards
+            break;
     }
 });
