@@ -1,38 +1,38 @@
 import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen } from "./init.js"
 import { gameLoop } from "./animation.js";
 import { initLevel, advanceLevel } from "./main.js"
+import { showGameOverMessage, gameEndedOverlay, showLevelCompletedOverlay } from "./update.js";
 
 export const startGame = () => {
-    if (gameState.value === "running") { console.log("game already running"); return };
+    if (gameState.value === "running") {
+        console.log("game already running"); return
+    } else {
+        console.log("startGame() called")
 
-    console.log("startGame() called")
+        if (!welcomeScreen || !gameScreen) {
+            console.error("Error: missing HTML components")
+            return
+        }
+        welcomeScreen.style.display = "none";
 
-    if (!welcomeScreen || !gameScreen) {
-        console.error("Error: missing HTML components")
-        return
+        // Show game screen and force it to appear
+        setTimeout(() => {
+            gameScreen.style.display = "block";
+            gameScreen.style.visibility = "visible";
+            gameScreen.style.opacity = "1";
+            gameScreen.style.zIndex = "10";
+            console.log("Game screen should now be visible.");
+        }, 50);;
+
+        initLevel();
+        gameState.value = "running";
+        accumulator.value = 0;
+        gameLoopID.value = requestAnimationFrame(gameLoop);
+
+        startButton.style.display = "none";
+        pauseButton.style.display = "inline-block";
+        endButton.style.display = "inline-block";
     }
-
-    console.log("switching screens...")
-
-    welcomeScreen.style.display = "none";
-
-    // Show game screen and force it to appear
-    setTimeout(() => {
-        gameScreen.style.display = "block";
-        gameScreen.style.visibility = "visible"; 
-        gameScreen.style.opacity = "1";
-        gameScreen.style.zIndex = "10";
-        console.log("Game screen should now be visible.");
-    }, 50);;
-    
-    initLevel();
-    gameState.value = "running";
-    accumulator.value = 0;
-    gameLoopID.value = requestAnimationFrame(gameLoop);
-
-    startButton.style.display = "none";
-    pauseButton.style.display = "inline-block";
-    endButton.style.display = "inline-block";
 }
 
 

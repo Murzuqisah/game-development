@@ -1,15 +1,12 @@
-import { balls, bricks, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, levelDisplay } from "./init.js";
+import { balls, bricks, batX, batY, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, livesDisplay, levelDisplay } from "./init.js";
 // import { initLevel }
-
-let batX = gameWidth / 2;
-let batY = gameHeight - 50
 
 // Create ball
 export const createBall = (x, y, dx, dy) => {
     const ballElem = document.createElement('div');
     ballElem.className = 'ball';
     gameArea.appendChild(ballElem);
-    return { x, y, dx, dy, elem: ballElem };
+    return { x: x, y: y, dx: dx, dy: dy, elem: ballElem };
 }
 
 export const removeAllBalls = () => {
@@ -17,7 +14,7 @@ export const removeAllBalls = () => {
     balls.length = 0;
 }
 
-export function createBricks() {
+export const createBricks = () => {
     bricks.splice(0, bricks.length);
     document.querySelectorAll('.brick').forEach(br => br.remove());
 
@@ -36,8 +33,8 @@ export function createBricks() {
     }
 
     // creating grid-like brick layout
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
+    for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
             let brick = {
                 x: xOffset + c * (brickWidth + gap),
                 y: yOffset + r * (brickHeight + gap),
@@ -61,13 +58,11 @@ export function createBricks() {
     }
 };
 
-export function initLevel() {
+export const initLevel = () => {
     // remove any level overlay
-    let overlay = document.getElementById("levelStep");
-    if (overlay) overlay.remove();
+    var overlay = document.getElementById("levelStep");
+    if (overlay) { overlay.remove() };
 
-    let batX = gameWidth / 2;
-    let batY = gameHeight - 50
     removeAllBalls();
 
     // ball speed increases with levels
@@ -88,30 +83,30 @@ export function initLevel() {
     levelDisplay.textContent = "Level: " + currentLevel;
 }
 
-export function updateHUD() {
+export const updateHUD = () => {
     scoreDisplay.textContent = "Score: " + score;
     livesDisplay.textContent = "Lives: " + lives;
     fpsDisplay.textContent = "FPS: " + fps;
 }
 
-export function draw() {
-    balls.forEach(function (ball) {
+export const draw = () =>{
+    balls.forEach(function(ball) {
         ball.elem.style.left = (ball.x - ballSize) + 'px';
         ball.elem.style.top = (ball.y - ballSize) + 'px';
     });
     batElem.style.left = (batX - batWidth / 2) + 'px';
     batElem.style.top = batY + 'px';
 
-    bricks.forEach(function (b) {
+    bricks.forEach(function(b) {
         if (b.changed) {
-            b.elem.visibility = b.active ? 'visible' : 'hidden';
+            b.elem.style.visibility = b.active ? 'visible' : 'hidden';
             b.changed = false;
         }
     });
 }
 
-export function updateBalls() {
-    balls.forEach(function (ball) {
+export const updateBalls = () => {
+    balls.forEach(function(ball) {
         // walls collision
         if (ball.x - ballSize + ball.dx < 0 || ball.x + ballSize + ball.dx > gameWidth) {
             ball.dx = -ball.dx;
@@ -139,8 +134,8 @@ export function updateBalls() {
 
         // brick collision
         if (!collisonHandled) {
-            for (let i = 0; i < bricks.length; i++) {
-                let b = bricks[i];
+            for (var i = 0; i < bricks.length; i++) {
+                var b = bricks[i];
                 if (!b.active) continue;
                 if (b.x < ball.x + ballSize &&
                     ball.x - ballSize < b.x + brickWidth &&

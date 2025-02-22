@@ -41,7 +41,7 @@ export function gameEndedOverlay() {
     console.error('gameArea not found!')
   }
 
-  let overlay = document.createElement('div')
+  var overlay = document.createElement('div')
   overlay.id = 'levelStep';
   overlay.innerHTML = `<div> You died </div>
                         <button onclick=startGame()> Restart Game </button>`;
