@@ -1,6 +1,7 @@
-import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen } from "./init.js"
+import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen } from "./init.js";
 import { gameLoop } from "./animation.js";
-import { initLevel, advanceLevel } from "./main.js"
+import { initLevel, advanceLevel } from "./main.js";
+import { gameEndedOverlay,showGameOverMessage } from "././update.js";
 
 export const startGame = () => {
     if (gameState.value === "running") { console.log("game already running"); return };
@@ -48,7 +49,8 @@ export const pauseGame = () => {
 // resume game
 export const resumeGame = () => {
     if (gameState != "paused") return;
-    lastFPSTime = performance.now();
+    console.log('game resuming...')
+    lastFPSTime.value = performance.now();
     accumulator.value = 0;
     gameState.value = "running";
     gameLoopID.value = requestAnimationFrame(gameLoop);
@@ -69,6 +71,5 @@ window.onload = () => {
     window.resumeGame = resumeGame;
     window.advanceLevel = advanceLevel;
     window.endGame = endGame;
-
 };
 
