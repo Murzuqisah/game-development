@@ -1,4 +1,4 @@
-import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen } from "./init.js"
+import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen, gameWidth, gameHeight, batHeight, lastFPSTime } from "./init.js"
 import { gameLoop } from "./animation.js";
 import { initLevel, advanceLevel } from "./main.js"
 import { showGameOverMessage, gameEndedOverlay, showLevelCompletedOverlay } from "./update.js";
@@ -7,7 +7,6 @@ export const startGame = () => {
     if (gameState.value === "running") {
         console.log("game already running"); return
     } else {
-        console.log("startGame() called")
 
         if (!welcomeScreen || !gameScreen) {
             console.error("Error: missing HTML components")
@@ -21,7 +20,6 @@ export const startGame = () => {
             gameScreen.style.visibility = "visible";
             gameScreen.style.opacity = "1";
             gameScreen.style.zIndex = "10";
-            console.log("Game screen should now be visible.");
         }, 50);;
 
         initLevel();
@@ -38,7 +36,7 @@ export const startGame = () => {
 
 // pause game
 export const pauseGame = () => {
-    if (gameState == "paused") return;
+    if (gameState.value == "paused") return;
     cancelAnimationFrame(gameLoopID.value);
     gameState.value = "paused";
     pauseButton.style.display = "none";
@@ -47,8 +45,8 @@ export const pauseGame = () => {
 
 // resume game
 export const resumeGame = () => {
-    if (gameState != "paused") return;
-    lastFPSTime = performance.now();
+    if (gameState.value != "paused") return;
+    lastFPSTime.value = performance.now();
     accumulator.value = 0;
     gameState.value = "running";
     gameLoopID.value = requestAnimationFrame(gameLoop);
@@ -69,6 +67,5 @@ window.onload = () => {
     window.resumeGame = resumeGame;
     window.advanceLevel = advanceLevel;
     window.endGame = endGame;
-
 };
 
