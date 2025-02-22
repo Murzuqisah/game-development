@@ -13,34 +13,35 @@ export const fpsDisplay = document.getElementById('fpsDisplay');
 
 
 // game area dimensions
-export const gameWidth = 400, gameHeight = 700;
+export const gameWidth = 400, gameHeight = 600;
 gameArea.style.width = gameWidth + 'px';
 gameArea.style.height = gameHeight + 'px';
 
 // element sizes
-export const ballSize = 80,
+export var ballSize = 10,
     batWidth = 80,
     batHeight = 20,
-    brickWidth = 40,
+    brickWidth = 30,
     brickHeight = 20;
 
 // array to hold bricks objects (x and y -> top left corner of the brick, active -> brick status)
 export let bricks = [],
-    balls = [],
-    batX = { value: gameWidth / 2 },
-    batY = { value: gameHeight - 50},
+    balls = [];
+
+export const batX = { value: gameWidth / 2 },
+    batY = { value: gameHeight - batHeight },
     batSpeed = 20;
 
-export let score = 0,
+export var score = 0,
     currentLevel = 1,
     lives = 3,
     levelStep = 5;
-    
-export let lastFPSTime = { value: performance.now()};
+
+export let lastFPSTime = { value: performance.now() };
 
 // Game control variables
-export let fps = { value: 0}
-export let frameCount = { value: 0};
-export let gameLoopID = { value: null};
+export let fps = { value: 0 }
+export let frameCount = { value: 0 };
+export let gameLoopID = { value: null };
 export let accumulator = { value: 0 };
 export let gameState = { value: "stopped" };
