@@ -1,9 +1,8 @@
-import { balls, bricks, batX, batY, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, livesDisplay, levelDisplay } from "./init.js";
-// import { initLevel }
+import { balls, bricks, batX, batY, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, livesDisplay, levelDisplay, levelStep, batSpeed } from "./init.js";
 
 // Create ball
 export const createBall = (x, y, dx, dy) => {
-    const ballElem = document.createElement('div');
+    var ballElem = document.createElement('div');
     ballElem.className = 'ball';
     gameArea.appendChild(ballElem);
     return { x: x, y: y, dx: dx, dy: dy, elem: ballElem };
@@ -19,7 +18,7 @@ export const createBricks = () => {
     document.querySelectorAll('.brick').forEach(br => br.remove());
 
     // define level-based parameters
-    let rows, cols, xOffset, yOffset, gap;
+    var rows, cols, xOffset, yOffset, gap;
     if (currentLevel === 1) {
         rows = 4; cols = 10; xOffset = 50; yOffset = 50; gap = 0;
     } else if (currentLevel === 2) {
@@ -27,7 +26,7 @@ export const createBricks = () => {
     } else if (currentLevel === 3) {
         rows = 6; cols = 10; xOffset = 30; yOffset = 35; gap = 2;
     } else if (currentLevel === 4) {
-        rows = 6; cols = 12; xOffset = 30; yOffset = 30; gap = 2;
+        rows = 6; cols = 12; xOffset = 20; yOffset = 30; gap = 2;
     } else if (currentLevel === 5) {
         rows = 7; cols = 12; xOffset = 10; yOffset = 25; gap = 2;
     }
@@ -35,7 +34,7 @@ export const createBricks = () => {
     // creating grid-like brick layout
     for (var r = 0; r < rows; r++) {
         for (var c = 0; c < cols; c++) {
-            let brick = {
+            var brick = {
                 x: xOffset + c * (brickWidth + gap),
                 y: yOffset + r * (brickHeight + gap),
                 active: true,
@@ -43,7 +42,7 @@ export const createBricks = () => {
                 special: false
             };
             bricks.push(brick);
-            let brickElem = document.createElement('div');
+            var brickElem = document.createElement('div');
             brickElem.className = 'brick';
             brickElem.style.left = brick.x + 'px';
             brickElem.style.top = brick.y + 'px';
@@ -52,7 +51,7 @@ export const createBricks = () => {
         };
     }
     if (bricks.length > 0) {
-        let specialIndex = Math.floor(Math.random() * bricks.length);
+        var specialIndex = Math.floor(Math.random() * bricks.length);
         bricks[specialIndex].special = true;
         bricks[specialIndex].elem.classList.add("special");
     }
@@ -63,21 +62,23 @@ export const initLevel = () => {
     var overlay = document.getElementById("levelStep");
     if (overlay) { overlay.remove() };
 
+    batX.value = gameWidth / 2;
+    batY.value = gameHeight - batHeight;
     removeAllBalls();
 
     // ball speed increases with levels
-    let speedMult = 1 + 0.5 * (currentLevel - 1);
-    let initDx = 45 * speedMult;
-    let initDy = -45 * speedMult;
+    var speedMult = 1 + 0.5 * (currentLevel - 1);
+    var initDx = 50 * speedMult;
+    var initDy = -50 * speedMult;
 
-    balls.push(createBall(gameWidth / 2, gameHeight - 100, initDx, initDy));
+    balls.push(createBall(gameWidth / 2, gameHeight - 100, initDx, initDy)); // Adjusted ball position
 
     createBricks();
     updateHUD();
 
     // set bat element position
-    batElem.style.left = (batX - batWidth / 2) + 'px';
-    batElem.style.top = batY + 'px';
+    batElem.style.left = (batX.value - batWidth / 2) + 'px';
+    batElem.style.top = batY.value + 'px';
 
     // update level display
     levelDisplay.textContent = "Level: " + currentLevel;
@@ -86,18 +87,18 @@ export const initLevel = () => {
 export const updateHUD = () => {
     scoreDisplay.textContent = "Score: " + score;
     livesDisplay.textContent = "Lives: " + lives;
-    fpsDisplay.textContent = "FPS: " + fps;
+    fpsDisplay.textContent = "FPS: " + fps.value;
 }
 
-export const draw = () =>{
-    balls.forEach(function(ball) {
+export const draw = () => {
+    balls.forEach(function (ball) {
         ball.elem.style.left = (ball.x - ballSize) + 'px';
         ball.elem.style.top = (ball.y - ballSize) + 'px';
     });
-    batElem.style.left = (batX - batWidth / 2) + 'px';
-    batElem.style.top = batY + 'px';
+    batElem.style.left = (batX.value - batWidth / 2) + 'px';
+    batElem.style.top = batY.value + 'px';
 
-    bricks.forEach(function(b) {
+    bricks.forEach(function (b) {
         if (b.changed) {
             b.elem.style.visibility = b.active ? 'visible' : 'hidden';
             b.changed = false;
@@ -106,14 +107,17 @@ export const draw = () =>{
 }
 
 export const updateBalls = () => {
-    balls.forEach(function(ball) {
-        // walls collision
-        if (ball.x - ballSize + ball.dx < 0 || ball.x + ballSize + ball.dx > gameWidth) {
+    balls.forEach(function (ball) {
+        // walls collision(left/right)
+        var collisonHandled = false;
+
+        if (ball.x - ballSize < 0 ||
+            ball.x + ballSize > gameWidth) {
             ball.dx = -ball.dx;
         }
 
         // top collision
-        if (ball.y - ballSize + ball.dy < 0) {
+        if (ball.y - ballSize < 0) {
             ball.dy = -ball.dy;
         }
 
@@ -127,21 +131,19 @@ export const updateBalls = () => {
             ball.dy = -ball.dy;
             collisonHandled = true;
         }
-
         // update ball position
         ball.x += ball.dx;
         ball.y += ball.dy;
 
-        // brick collision
         if (!collisonHandled) {
+            // brick collision
             for (var i = 0; i < bricks.length; i++) {
                 var b = bricks[i];
                 if (!b.active) continue;
                 if (b.x < ball.x + ballSize &&
                     ball.x - ballSize < b.x + brickWidth &&
                     b.y < ball.y + ballSize &&
-                    ball.y - ballSize < b.y + brickHeight
-                ) {
+                    ball.y - ballSize < b.y + brickHeight) {
                     b.active = false;
                     b.changed = true;
                     ball.dy = -ball.dy;
@@ -155,27 +157,28 @@ export const updateBalls = () => {
                 }
             }
         }
-        balls = balls.filter(function (ball) {
-            return ball.y - ballSize <= gameHeight;
-        });
-
-        if (balls.length === 0) {
-            loseLife();
-        }
     });
+
+    balls = balls.filter(function (ball) {
+        return ball.y - ballSize <= gameHeight;
+    });
+
+    if (balls.length === 0) {
+        loseLife();
+    }
 }
 
 
 
 // update bat position
 export function moveBat() {
-    batX += batSpeed;
-    if (batX < batWidth / 2) batX = batWidth / 2;
-    if (batX > gameWidth - batWidth / 2) batX = gameWidth - batWidth / 2;
+    batX.value += batSpeed;
+    if (batX.value < batWidth / 2) batX.value = batWidth / 2;
+    if (batX.value > gameWidth - batWidth / 2) batX.value = gameWidth - batWidth / 2;
 }
 
 export function checkLevelCompletion() {
-    let allCleared = bricks.every(function (b) { return !b.active; })
+    var allCleared = bricks.every(function (b) { return !b.active; })
     if (allCleared) {
         cancelAnimationFrame(gameLoopID.value);
         gameState.value = "paused";
@@ -184,10 +187,10 @@ export function checkLevelCompletion() {
 }
 
 export function advanceLevel() {
-    let overlay = document.getElementById("levelStep");
-    if (overlay) overlay.remove();
+    var overlay = document.getElementById("levelStep");
+    if (overlay) { overlay.remove() };
     currentLevel++
-    if (currentLevel > maxLevel) {
+    if (currentLevel > levelStep) {
         showGameOverMessage("Congratulations! You completed all levels!");
         gameState.value = "stopped";
         return;
@@ -203,12 +206,12 @@ export function loseLife() {
     if (lives <= 0) {
         endGame();
         gameState.value = "stopped"
-        // gameEndedOverlay();
+        gameEndedOverlay();
     } else {
         cancelAnimationFrame(gameLoopID.value);
         removeAllBalls();
         setTimeout(function () {
-            let speedMult = 1 + 0.5 * (currentLevel - 1);
+            var speedMult = 1 + 0.5 * (currentLevel - 1);
             balls.push(createBall(gameWidth / 2, gameHeight - 100, 45 * speedMult, -45 * speedMult));
             gameLoopID.value = setInterval(gameLoop, 16);
             gameState.value = "running";
