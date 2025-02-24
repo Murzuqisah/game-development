@@ -29,8 +29,8 @@ export let bricks = [],
     balls = [];
 
 export const batX = { value: gameWidth / 2 },
-    batY = { value: gameHeight - batHeight },
-    batSpeed = 20;
+    batY = { value: gameHeight - 50 },
+    batSpeed = 45;
 
 export var score = 0,
     currentLevel = 1,
