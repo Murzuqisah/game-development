@@ -1,5 +1,6 @@
 import { balls, bricks, batX, batY, gameArea, gameWidth, gameHeight, ballSize, brickHeight, brickWidth, currentLevel, score, lives, fps, batElem, batWidth, batHeight, livesDisplay, levelDisplay, levelStep, batSpeed } from "./init.js";
 
+let ballLaunched = false;
 // Create ball
 export const createBall = (x, y, dx, dy) => {
     var ballElem = document.createElement('div');
@@ -62,7 +63,7 @@ export const initLevel = () => {
     var overlay = document.getElementById("levelStep");
     if (overlay) { overlay.remove() };
 
-    batX.value = gameWidth / 2;
+    batX.value = (gameWidth - batWidth) / 2;
     batY.value = gameHeight - batHeight;
     removeAllBalls();
 
@@ -72,7 +73,7 @@ export const initLevel = () => {
     var initDy = -50 * speedMult;
 
     // ball starts on top of the bat
-    balls.push(createBall(gameWidth / 2, gameHeight - 100, 0, 0));
+    balls.push(createBall(batX.value, batY.value - ballSize, 0, 0));
     createBricks();
     updateHUD();
 
@@ -108,8 +109,15 @@ export const draw = () => {
 
 export const updateBalls = () => {
     balls.forEach(function (ball) {
+        if (!ballLaunched) {
+            ball.x = batX.value;
+            ball.y = batY.value - ballSize;
+        } else {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+        }
         // walls collision(left/right)
-        // var collisonHandled = false;
+        var collisonHandled = false;
 
         if (ball.x - ballSize < 0 || ball.x + ballSize > gameWidth) {
             ball.dx *= -1;
@@ -127,13 +135,17 @@ export const updateBalls = () => {
         // bat collision
         if (ball.dy > 0 &&
             ball.y + ballSize >= batY &&
-            ball.y + ballSize - ball.dy < batY &&
-            ball.x + ballSize > batX - batWidth / 2 &&
-            ball.x - ballSize < batX + batWidth / 2) {
+            ball.x + ballSize > batX.value - batWidth / 2 &&
+            ball.x - ballSize < batX.value + batWidth / 2) {
             ball.y = batY - ballSize;
-            ball.dy = -ball.dy;
-            collisonHandled = true;
+            ball.dy *= -1;
+
+            // Adjust horizontal movement based on where the ball hits the bat
+            let batCenter = batX.value;
+            let hitPosition = (ball.x - batCenter) / (batWidth / 2);
+            ball.dx = hitPosition * Math.abs(ball.dx);
         }
+
         // update ball position
         ball.x += ball.dx;
         ball.y += ball.dy;
@@ -160,6 +172,9 @@ export const updateBalls = () => {
                 }
             }
         }
+
+        ballElem.style.left = ball.x + 'px';
+        ballElem.style.top = ball.y + 'px';
     });
 
     balls = balls.filter(function (ball) {
@@ -176,8 +191,17 @@ export const updateBalls = () => {
 // update bat position
 export function moveBat() {
     batX.value += batSpeed;
-    if (batX.value < batWidth / 2) batX.value = batWidth / 2;
-    if (batX.value > gameWidth - batWidth / 2) batX.value = gameWidth - batWidth / 2;
+
+    // Ensure batX represents the LEFT edge of the bat
+    if (batX.value < 0) batX.value = 0;
+    if (batX.value > gameWidth - batWidth) batX.value = gameWidth - batWidth;
+
+    batElem.style.left = (batX.value - batWidth / 2) + 'px';
+
+    // If ball is not launched, move it with the bat
+    if (!ballLaunched && balls.length > 0) {
+        balls[0].x = batX.value + batWidth / 2 - ballSize / 2;
+    }
 }
 
 export function checkLevelCompletion() {
