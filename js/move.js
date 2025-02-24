@@ -1,23 +1,32 @@
-import { balls, bricks, gameWidth, gameHeight } from "./init.js";
+import { balls, bricks, gameWidth, gameHeight, ballSize, batY, lives, brickHeight, brickWidth } from "./init.js";
+import { removeAllBalls } from "./main.js";
+import { showGameOverMessage } from "./update.js";
+
 export function updateGame(deltaTime) {
-    for (let ball of balls) {
-        let dx = ball.dx * deltaTime;
-        let dy = ball.dy * deltaTime;
+    for (var ball of balls) {
+        let safeDelta = Math.min(deltaTime, 0.03);
+        let dx = ball.dx * safeDelta;
+        let dy = ball.dy * safeDelta;
+
         ball.x += dx;
         ball.y += dy;
 
-        // Check wall collisions
-        if (ball.x - ball.radius < 0 || ball.x + ball.radius > gameWidth) {
-            ball.dx *= -1;
+        // Check wall collisions(left, right, top)
+        if (ball.x - ballSize < 0 || ball.x + ballSize > gameWidth) {
+            ball.dx = -ball.dx;
         }
-        if (ball.y - ball.radius < 0) {
-            ball.dy *= -1;
+        if (ball.y - ballSize < 0) { // top collision
+            ball.y = ballSize;
+            ball.dy = -ball.dy;
         }
+
+
 
         // Check bat collision
         let batCollisionTime = SweptBatCollision(ball, deltaTime);
-        if (batCollisionTime !== null) {
-            ball.dy *= -1; // Reverse vertical direction
+        if (batCollisionTime) {
+            ball.y = batY - ballSize; // Ensure ball is on top of bat
+            ball.dy = -Math.abs(ball.dy); // Always bounce upwards
         }
 
         // Check brick collisions using swept AABB
@@ -26,11 +35,16 @@ export function updateGame(deltaTime) {
 
             let collision = sweptAABB(ball, brick, deltaTime);
             if (collision) {
-                // Apply collision response
-                if (collision.normal.x !== 0) ball.dx *= -1;
-                if (collision.normal.y !== 0) ball.dy *= -1;
+                ball.x += collision.t * dx;
+                ball.y += collision.t * dy;
 
-                brick.visible = false; // Remove brick
+                // Apply collision response
+                if (collision.normal.x !== 0) ball.dx = Math.sign(ball.dx) * Math.abs(ball.dx);
+                if (collision.normal.y !== 0) ball.dy = -Math.abs(ball.dy); // Always bounce upwards
+
+                setTimeout(() => brick.elem.remove(), 50); // Delay removal slightly
+                brick.changed = true;
+                brick.elem.style.visibility = "hidden"; // Update DOM
                 score += 10;
 
                 // Check level completion
@@ -38,15 +52,17 @@ export function updateGame(deltaTime) {
                     advanceLevel();
                 }
             }
+            console.log("Ball:", ball.x, ball.y, "Brick:", brick.x, brick.y, "Collision:", collision);
         }
 
         // Ball falls below bat (lose a life)
         if (ball.y > gameHeight) {
             lives--;
             if (lives <= 0) {
-                endGame();
+                showGameOverMessage();
             } else {
-                resetBall();
+                // removeAllBalls();
+                console.log("Ball is still in play:", ball.x, ball.y);
             }
         }
     }
@@ -63,9 +79,9 @@ function sweptAABB(ball, brick, dt) {
     let ballBottom = ball.y + ballSize;
 
     let brickLeft = brick.x;
-    let brickRight = brick.x + brickWidth;
     let brickTop = brick.y;
-    let brickBottom = brick.y + brickHeight;
+    let brickRight = brick.x + brick.width;
+    let brickBottom = brick.y + brick.height;
 
     let tx_entry, tx_exit, ty_entry, ty_exit;
 
@@ -94,16 +110,16 @@ function sweptAABB(ball, brick, dt) {
     let entryTime = Math.max(tx_entry, ty_entry);
     let exitTime = Math.min(tx_exit, ty_exit);
 
-    if (entryTime > exitTime || entryTime < 0 || entryTime > 1) {
+    if (entryTime > exitTime || entryTime < 0 || entryTime > 1.1) {
         return null;
     }
 
     // Determine collision normal based on which axis had the later entry.
     let normal = { x: 0, y: 0 };
     if (tx_entry > ty_entry) {
-        normal.x = dx > 0 ? -1 : 1;
+        normal = { x: Math.sign(dx), y: 0 };  // Flip X direction
     } else {
-        normal.y = dy > 0 ? -1 : 1;
+        normal = { x: 0, y: Math.sign(dy) };  // Flip Y direction
     }
 
     return { t: entryTime, normal: normal };
@@ -111,15 +127,16 @@ function sweptAABB(ball, brick, dt) {
 
 // Swept collision detection for the bat
 function SweptBatCollision(ball, dt) {
-    if (ball.dy <= 0) return null;
-    let dy = ball.dy * dt;
-    let t = (batY - (ball.y + ballSize)) / dy;
-    if (t < 0 || t > 1) return null;
-    let dx = ball.dx * dt;
-    let ballXAtCollision = ball.x + dx * t;
-    if (ballXAtCollision + ballSize < batX - batW / 2 ||
-        ballXAtCollision - ballSize > batX + batW / 2) {
-        return null;
+    if (ball.dy <= 0) return null; // Ball must be moving downward
+
+    let nextBallY = ball.y + ball.dy * dt;
+
+    if (
+        nextBallY + ballSize >= batY &&  // Ball reaches bat level
+        ball.x + ballSize > batX - batWidth / 2 &&  // Ball within bat width
+        ball.x - ballSize < batX + batWidth / 2
+    ) {
+        return true;
     }
-    return t;
+    return null;
 }
