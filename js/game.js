@@ -1,7 +1,7 @@
-import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameArea, gameScreen, gameWidth, gameHeight, batHeight, lastFPSTime } from "./init.js"
+import { startButton, pauseButton, endButton, resumeButton, gameState, gameLoopID, accumulator, welcomeScreen, gameScreen, lastFPSTime } from "./init.js"
 import { gameLoop } from "./animation.js";
 import { initLevel, advanceLevel } from "./main.js"
-import { showGameOverMessage, gameEndedOverlay, showLevelCompletedOverlay } from "./update.js";
+import { showGameOverMessage, gameEndedOverlay } from "./update.js";
 
 export const startGame = () => {
     if (gameState.value === "running") {
