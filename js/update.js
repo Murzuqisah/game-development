@@ -28,9 +28,9 @@ export const showGameOverMessage = (msg) => {
     // Show the start button as "Restart"
     startButton.style.display = "inline-block";
     startButton.textContent = "Restart";
-    pauseButton.style.display = "none";
+    pauseButton.style.display = "inline-block";
     resumeButton.style.display = "none";
-    endButton.style.display = "none";
+    endButton.style.display = "inline-block";
   }, 3000);
 }
 
