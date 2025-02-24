@@ -61,8 +61,8 @@ export function updateGame(deltaTime) {
             if (lives <= 0) {
                 showGameOverMessage();
             } else {
-                // removeAllBalls();
-                console.log("Ball is still in play:", ball.x, ball.y);
+                removeAllBalls();
+                // console.log("Ball is still in play:", ball.x, ball.y);
             }
         }
     }
