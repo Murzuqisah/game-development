@@ -74,9 +74,11 @@ button:hover {
 
 /* Heads-Up Display */
 #hud {
+    position: absolute;
     margin-bottom: 10px;
-    font-size: 16px;
-    color: #222;
+    font-size: 18px;
+    color: #fff;
+    font-family: Arial, sans-serif;
 }
 
 #hud span {
