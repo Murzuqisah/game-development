@@ -24,9 +24,10 @@ export function updateGame(deltaTime) {
 
         // Check bat collision
         let batCollisionTime = SweptBatCollision(ball, deltaTime);
-        if (batCollisionTime) {
-            ball.y = batY - ballSize; // Ensure ball is on top of bat
-            ball.dy = -Math.abs(ball.dy); // Always bounce upwards
+        if (batCollisionTime !== null) {
+            ball.x += batCollisionTime * dx; // Move ball to the bat collision point
+            ball.y = batY - ballSize;
+            ball.dy = -Math.abs(ball.dy); // Ensure bounce always goes upward
         }
 
         // Check brick collisions using swept AABB
@@ -35,24 +36,26 @@ export function updateGame(deltaTime) {
 
             let collision = sweptAABB(ball, brick, deltaTime);
             if (collision) {
+                // Move the ball to the exact collision point
                 ball.x += collision.t * dx;
                 ball.y += collision.t * dy;
 
-                // Apply collision response
-                if (collision.normal.x !== 0) ball.dx = Math.sign(ball.dx) * Math.abs(ball.dx);
-                if (collision.normal.y !== 0) ball.dy = -Math.abs(ball.dy); // Always bounce upwards
+                // Reverse the direction of movement
+                if (collision.normal.x !== 0) ball.dx *= -1;
+                if (collision.normal.y !== 0) ball.dy *= -1;
 
-                setTimeout(() => brick.elem.remove(), 50); // Delay removal slightly
-                brick.changed = true;
-                brick.elem.style.visibility = "hidden"; // Update DOM
+                // Remove brick properly
+                brick.visible = false;
+                brick.elem.style.visibility = "hidden";
+
                 score += 10;
 
                 // Check level completion
                 if (bricks.every(b => !b.visible)) {
                     advanceLevel();
                 }
+                break; // Ensure only ONE brick is hit per frame
             }
-            console.log("Ball:", ball.x, ball.y, "Brick:", brick.x, brick.y, "Collision:", collision);
         }
 
         // Ball falls below bat (lose a life)
@@ -79,9 +82,9 @@ function sweptAABB(ball, brick, dt) {
     let ballBottom = ball.y + ballSize;
 
     let brickLeft = brick.x;
+    let brickRight = brick.x + brickWidth;
     let brickTop = brick.y;
-    let brickRight = brick.x + brick.width;
-    let brickBottom = brick.y + brick.height;
+    let brickBottom = brick.y + brickHeight;
 
     let tx_entry, tx_exit, ty_entry, ty_exit;
 
@@ -110,16 +113,15 @@ function sweptAABB(ball, brick, dt) {
     let entryTime = Math.max(tx_entry, ty_entry);
     let exitTime = Math.min(tx_exit, ty_exit);
 
-    if (entryTime > exitTime || entryTime < 0 || entryTime > 1.1) {
-        return null;
+    if (entryTime > exitTime || entryTime < 0 || entryTime > 1) {
+        return null; // No valid collision
     }
 
-    // Determine collision normal based on which axis had the later entry.
     let normal = { x: 0, y: 0 };
     if (tx_entry > ty_entry) {
-        normal = { x: Math.sign(dx), y: 0 };  // Flip X direction
+        normal.x = dx > 0 ? -1 : 1;  // Ball hit left or right
     } else {
-        normal = { x: 0, y: Math.sign(dy) };  // Flip Y direction
+        normal.y = dy > 0 ? -1 : 1;  // Ball hit top or bottom
     }
 
     return { t: entryTime, normal: normal };
@@ -129,14 +131,16 @@ function sweptAABB(ball, brick, dt) {
 function SweptBatCollision(ball, dt) {
     if (ball.dy <= 0) return null; // Ball must be moving downward
 
-    let nextBallY = ball.y + ball.dy * dt;
+    let ballBottomNext = ball.y + ball.dy * dt + ballSize;
+    let batTop = batY;
 
-    if (
-        nextBallY + ballSize >= batY &&  // Ball reaches bat level
-        ball.x + ballSize > batX - batWidth / 2 &&  // Ball within bat width
-        ball.x - ballSize < batX + batWidth / 2
-    ) {
-        return true;
+    if (ballBottomNext >= batTop &&
+        ball.x + ballSize > batX - batWidth / 2 &&
+        ball.x - ballSize < batX + batWidth / 2) {
+
+        // Calculate when the ball will hit the bat
+        let t = (batTop - (ball.y + ballSize)) / ball.dy;
+        return Math.max(0, Math.min(1, t)); // Clamp t between 0 and 1
     }
     return null;
 }
