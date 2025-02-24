@@ -71,8 +71,8 @@ export const initLevel = () => {
     var initDx = 50 * speedMult;
     var initDy = -50 * speedMult;
 
-    balls.push(createBall(gameWidth / 2, gameHeight - 100, initDx, initDy)); // Adjusted ball position
-
+    // ball starts on top of the bat
+    balls.push(createBall(gameWidth / 2, gameHeight - 100, 0, 0));
     createBricks();
     updateHUD();
 
@@ -109,15 +109,18 @@ export const draw = () => {
 export const updateBalls = () => {
     balls.forEach(function (ball) {
         // walls collision(left/right)
-        var collisonHandled = false;
+        // var collisonHandled = false;
 
-        if (ball.x - ballSize < 0 ||
-            ball.x + ballSize > gameWidth) {
-            ball.dx = -ball.dx;
+        if (ball.x - ballSize < 0 || ball.x + ballSize > gameWidth) {
+            ball.dx *= -1;
+
+            if (ball.x - ballSize < 0) ball.x = ballSize;
+            if (ball.x + ballSize > gameWidth) ball.x = gameWidth - ballSize;
         }
 
         // top collision
-        if (ball.y - ballSize < 0) {
+        if (ball.dy - ballSize < 0) {
+            ball.y = ballSize;
             ball.dy = -ball.dy;
         }
 
@@ -218,6 +221,3 @@ export function loseLife() {
         }, 1000);
     }
 }
-
-
-// export { createBall, createBricks, removeAllBalls, initLevel, draw, updateBalls, moveBat, checkLevelCompletion, advanceLevel, updateHUD,  updateGame, loseLife };
